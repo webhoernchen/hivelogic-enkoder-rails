@@ -44,7 +44,11 @@ module EnkoderRails
         }
       ]
 
-      kode = "document.write("+ js_dbl_quote(html) +");"
+      html_id = 'enkode_' + Time.now.to_f.to_s.gsub('.', '-')
+
+#      kode = "document.write("+ js_dbl_quote(html) +");"
+#      kode = "(function() {var target = document.getElementById('#{html_id}'); var tmpObject = document.createElement('div'); tmpObject.innerHTML = #{js_dbl_quote(html)}; target.parentNode.replaceChild(tmpObject.childNodes, target); })()"
+      kode = "(function(){var d=document;var t=d.getElementById('#{html_id}');var o=d.createElement('div');o.innerHTML=#{js_dbl_quote(html)};o.childNodes.forEach(function(e){t.parentNode.insertBefore(e,t); });t.remove();})()"
 
       max_length = kode.length+1 unless max_length>kode.length
 
@@ -56,8 +60,8 @@ module EnkoderRails
         kode = "kode=" + js_dbl_quote(kode) + kodes[idx]['js']
         js = "var kode=\n"+js_wrap_quote(js_dbl_quote(kode),79)
         js = js+"\n;var i,c,x;while(eval(kode));"
-        js = "function hivelogic_enkoder(){"+js+"}hivelogic_enkoder();"
-        js = '<script type="text/javascript">'+"\n/* <![CDATA[ */\n"+js
+        js = "(function(){"+js+"})();"
+        js = '<script async="async" id="' + html_id +  '" type="text/javascript">'+"\n/* <![CDATA[ */\n"+js
         js = js+"\n/* ]]> */\n</script>"
         result = js unless result.length>max_length
       end
