@@ -61,7 +61,7 @@ module EnkoderRails
         js = "var kode=\n"+js_wrap_quote(js_dbl_quote(kode),79)
         js = js+"\n;var i,c,x;while(eval(kode));"
         js = "(function(){"+js+"})();"
-        js = '<script async="async" id="' + html_id +  '" type="text/javascript">'+"\n/* <![CDATA[ */\n"+js
+        js = '<script id="' + html_id +  '" type="text/javascript">'+"\n/* <![CDATA[ */\n"+js
         js = js+"\n/* ]]> */\n</script>"
         result = js unless result.length>max_length
       end
